@@ -3,6 +3,7 @@ const fs = require('fs')
 leftList = []
 rightList = []
 
+//Part 1
 function calcTotalDist(leftList, rightList) {
     leftList.sort((a,b) => a-b);
     rightList.sort((a,b) => a-b);
@@ -18,6 +19,26 @@ function calcTotalDist(leftList, rightList) {
     }
 
     return totalDist;
+}
+
+//Part 2
+function calcSimilarity(leftList, rightList) {
+    //Count occurences of each no. in the right list
+    const rightCount = {}; // data will be saved in key:value (i.e num:count)
+
+    rightList.forEach(num => {
+        rightCount[num] = (rightCount[num] || 0) + 1; // if rightcount[num] exists and not undefined uses that value or 0, uses that value. If it is undefined, it means its a value not seen yet and uses 0.
+    });
+
+    // console.log("Right List Counts:", rightCount);
+
+    let similarityScore = 0;
+    leftList.forEach(num => {
+        const rightCounter = rightCount[num] || 0;
+        similarityScore += num * rightCounter;
+    });
+
+    return similarityScore;
 }
 
 fs.readFile('input.txt', 'utf-8', (error, data) => {
@@ -37,7 +58,12 @@ fs.readFile('input.txt', 'utf-8', (error, data) => {
         rightList.push(right); // then each get put into their respective arrays
     });
 
-    const result = calcTotalDist(leftList, rightList);
-    console.log(result);
+    //Part 1 solution
+    const result1 = calcTotalDist(leftList, rightList);
+    console.log(result1);
+
+    //Part 2 solution
+    const result2 = calcSimilarity(leftList, rightList);
+    console.log(result2);
 })
 
